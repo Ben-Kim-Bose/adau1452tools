@@ -1,0 +1,2 @@
+function [response] = readADAU1452Register_aardvark(obj, register_uint16, readlength)
+end
