@@ -57,12 +57,12 @@ classdef ADAU1452Constants < handle
             obj.SPDIFInputSourceRegisters = table(DataMask,RegisterAddress,'RowName',RegisterName);
 
             %% Serial Port Config Registers
-            % Serial Port Control 0 Register
+            % Serial Port Control 0 Register (SDATA_INx 0-3, SDATA_OUTx 0-3)
             RegisterName = {'SERIAL_BYTE_0_0', 'SERIAL_BYTE_1_0', 'SERIAL_BYTE_2_0', 'SERIAL_BYTE_3_0', 'SERIAL_BYTE_4_0', 'SERIAL_BYTE_5_0', 'SERIAL_BYTE_6_0', 'SERIAL_BYTE_7_0'}';
             DataMask =          {0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF}';
             RegisterAddress =   {0xF200, 0xF204, 0xF208, 0xF20C, 0xF210, 0xF214, 0xF218, 0xF21C}';
             obj.SerialPortControl0Registers = table(DataMask,RegisterAddress,'RowName',RegisterName);  
-            % Serial Port Control 1 Register
+            % Serial Port Control 1 Register (SDATA_INx 0-3, SDATA_OUTx 0-3)
             RegisterName = {'SERIAL_BYTE_0_1', 'SERIAL_BYTE_1_1', 'SERIAL_BYTE_2_1', 'SERIAL_BYTE_3_1', 'SERIAL_BYTE_4_1', 'SERIAL_BYTE_5_1', 'SERIAL_BYTE_6_1', 'SERIAL_BYTE_7_1'}';
             DataMask =          {0x003F, 0x003F, 0x003F, 0x003F, 0x003F, 0x003F, 0x003F, 0x003F}';
             RegisterAddress =   {0xF201, 0xF205, 0xF209, 0xF20D, 0xF211, 0xF215, 0xF219, 0xF21D}';

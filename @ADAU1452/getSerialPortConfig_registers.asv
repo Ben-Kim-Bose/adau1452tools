@@ -1,0 +1,105 @@
+function [serialPortConfig] = getSerialPortConfig_registers(obj)
+    %GETSERIALPORTCONFIG_REGISTERS 
+    % Serial Port Control Register info pulled from ADAU1452Constants 
+    sptCtrl0Regs = {'SERIAL_BYTE_0_0', 'SERIAL_BYTE_1_0', 'SERIAL_BYTE_2_0', 'SERIAL_BYTE_3_0', 'SERIAL_BYTE_4_0', 'SERIAL_BYTE_5_0', 'SERIAL_BYTE_6_0', 'SERIAL_BYTE_7_0'};
+    sptCtrl0Regs_addr = [obj.DeviceConstants.SerialPortControl0Registers.RegisterAddress{sptCtrl0Regs}];
+    sptCtrl0Regs_mask = [obj.DeviceConstants.SerialPortControl0Registers.DataMask{sptCtrl0Regs}];
+    sptCtrl1Regs = {'SERIAL_BYTE_0_1', 'SERIAL_BYTE_1_1', 'SERIAL_BYTE_2_1', 'SERIAL_BYTE_3_1', 'SERIAL_BYTE_4_1', 'SERIAL_BYTE_5_1', 'SERIAL_BYTE_6_1', 'SERIAL_BYTE_7_1'};
+    sptCtrl1Regs_addr = [obj.DeviceConstants.SerialPortControl1Registers.RegisterAddress{sptCtrl1Regs}];
+    sptCtrl1Regs_mask = [obj.DeviceConstants.SerialPortControl1Registers.DataMask{sptCtrl1Regs}];
+    % Concatenate all names, addresses, and datamasks
+    reg_names = [sptCtrl0Regs, sptCtrl1Regs];
+    reg_addr  = [sptCtrl0Regs_addr, sptCtrl1Regs_addr];
+    reg_mask  = [sptCtrl0Regs_mask, sptCtrl1Regs_mask];
+    % Contains human-readable config structs
+    reg_data = cell(1, length(reg_names));
+
+    for i=1:length(reg_names/2)
+        ctrl0_value = obj.readRegister(reg_addr(i), 'readLength', 2);
+        ctrl0_value = bitand(reg_value_unmasked, reg_mask(i));
+        reg_data{i} = local_decodeCTRLReg(ctrl0_value, ctrl1_value);
+    end
+    
+    a=1;
+    %Concatenate structs
+    serialPortConfig.SDATA_IN0 = reg_data{1};
+    serialPortConfig.SDATA_IN2 = reg_data{2};
+    serialPortConfig.SDATA_IN3 = reg_data{3};
+    serialPortConfig.SDATA_IN4 = reg_data{4};
+    serialPortConfig.SDATA_OUT0 = reg_data{5};
+    serialPortConfig.SDATA_OUT1 = reg_data{6};
+    serialPortConfig.SDATA_OUT2 = reg_data{7};
+    serialPortConfig.SDATA_OUT3 = reg_data{8};
+    serialPortConfig = [];
+    
+    function [resultStruct] = local_decodeCTRLReg(reg_value_in)
+        device_constants = ADAU1452Constants();
+        frameClockSourceValues  = device_constants.SPTFrameClockSourceTable.Value;
+        bitClockSourceValues    = device_constants.SPTBitClockSourceTable.Value;
+        frameClockModeValues    = device_constants.SPTFrameClockModeTable.Value;
+        frameClockPolarityValues = device_constants.SPTFrameClockPolarityTable.Value;
+        bitClockPolarityValues  = device_constants.SPTBitClockPolarityTable.Value;
+        wordLengthValues        = device_constants.SPTWordLengthTable.Value;
+        dataFormatValues        = device_constants.SPTDataFormatTable.Value;
+        tdmModeValues           = device_constants.SPTTDMModeTable.Value;
+        tristateEnabledValues   = device_constants.SPTTristateEnabledTable.Value;
+        clockGeneratorValues    = device_constants.SPTClockGeneratorTable.Value;
+        sampleRateValues        = device_constants.SPTSampleRateTable.Value;
+        
+        % Frame Clock Source
+        frameClockSource = polyval(bitget(reg_value_in, 16:-1:14), 2);
+        frameClockSource_str = frameClockSourceValues(frameClockSource+1);
+
+        % Bit Clock Source
+        bitClockSource = polyval(bitget(reg_value_in, 13:-1:11), 2);
+        bitClockSource_str = bitClockSourceValues(bitClockSource+1);
+        
+        % Frame Clock Mode
+        frameClockMode = bitget(reg_value_in, 10);
+        frameClockMode_str = frameClockModeValues(frameClockMode+1);
+
+        % Frame Clock Polarity
+        frameClockPolarity = bitget(reg_value_in, 9);
+        frameClockPolarity_str = frameClockPolarityValues(frameClockPolarity+1);
+
+        % Bit Clock Polarity
+        bitClockPolarity = bitget(reg_value_in, 8);
+        bitClockPolarity_str = bitClockPolarityValues(bitClockPolarity+1);
+
+        % Word Length
+        wordLength = polyval(bitget(reg_value_in, 7:-1:6), 2);
+        wordLength_str = wordLengthValues(wordLength+1);
+
+        % Data Format
+        dataFormat = polyval(bitget(reg_value_in, 5:-1:4), 2);
+        dataFormat_str = dataFormatValues(dataFormat+1);
+
+        % TDM Mode
+        tdmMode = polyval(bitget(reg_value_in, 3:-1:1), 2);
+        tdmMode_str = tdmModeValues(tdmMode+1);
+
+        % Tristate Enabled
+        tristateEnabled = bitget(reg_value_in, 6);
+        tristateEnabled_str = tristateEnabledValues(tristateEnabled+1);
+        
+        % Clock Generator
+        clockGenerator = polyval(bitget(reg_value_in, 5:-1:4), 2);
+        clockGenerator_str = clockGeneratorValues(clockGenerator+1);
+
+        % Sample Rate
+        sampleRate = polyval(bitget(reg_value_in, 3:-1:1), 2);
+        sampleRate_str = sampleRateValues(sampleRate+1);
+
+        resultStruct.frameClockSource = frameClockSource_str;
+        resultStruct.bitClockSource = bitClockSource_str;
+        resultStruct.frameClockMode = frameClockMode_str;
+        resultStruct.frameClockPolarity = frameClockPolarity_str;
+        resultStruct.bitClockPolarity = bitClockPolarity_str;
+        resultStruct.wordLength = wordLength_str;
+        resultStruct.dataFormat = dataFormat_str;
+        resultStruct.tdmMode = tdmMode_str;
+        resultStruct.tristateEnabled = tristateEnabled_str;
+        resultStruct.clockGenerator = clockGenerator_str;
+        resultStruct.sampleRate = sampleRate_str;
+    end
+end

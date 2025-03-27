@@ -21,7 +21,7 @@ function [response] = readADAU1452Register_aardvark(obj, address_uint16, readLen
     write(obj.HWOBJ.ConnectionObject, addr_bytes, 'uint8');
     data_bytes = read(obj.HWOBJ.ConnectionObject, readLength, 'uint8');
     data = uint16(0);
-    data = bitor(data, uint16(bitshift(data_bytes(1),-4)));
-    data = bitor(data, uint16(bitshift(data_bytes(2),0)));
+    data = bitor(data, uint16(bitshift(uint16(data_bytes(1)),8)));
+    data = bitor(data, uint16(bitshift(uint16(data_bytes(2)),0)));
     response = data;
 end

@@ -1,18 +1,20 @@
 classdef ADAU1452
-    % ADAU1452 Class
+    % ADAU1452 Class to hold connections, settings, and data routing of an
+    % ADAU1452 DSP.
 
     properties (SetAccess=private, GetAccess=public)
         ConnectionStatus = 'Not Connected'
-        I2CConfig
+        SerialPortConfig
+        ASRCConfig
     end 
 
     properties (Access=public) % make private later
         HWOBJ
-        Connected = false;
+        Connected = false
         InternalDataRouting
     end
 
-    properties (Constant, Access=public) % make private later
+    properties (Constant, Access=private)
         DeviceConstants = ADAU1452Constants();
     end
 
@@ -24,11 +26,8 @@ classdef ADAU1452
             obj.HWOBJ = ADAU1452ConnectionObj('WalnutIdx',options.WalnutIdx);
             obj.ConnectionStatus = 'Connected';
             obj.Connected = obj.HWOBJ.IsConnected;
-        end
-
-        function [success] = populateDataRoutes(obj)
-            % obj.InternalDataRouting = obj.populateDataRoutes_registers();
-            success = true;
+            obj.readRegister(0xF204)
+            obj.SerialPortConfig = obj.getSerialPortConfig();
         end
 
         %% Read/Write Registers
@@ -50,6 +49,13 @@ classdef ADAU1452
                options.verifyWrites (1,1) = false;
            end
            success = obj.writeADAU1452Register_aardvark(register_uint16,value_uint16,'maxChunkSize', options.maxChunkSize,'verifyWrites',options.verifyWrites);
+        end
+
+        %% Data Routing Methods
+        function [success] = populateDataRoutes(obj)
+            fprintf('Populating Data Routes\n');
+            %obj.InternalDataRouting = obj.populateDataRoutes_registers();
+            success = true;
         end
 
         %% Serial Port Config
@@ -75,16 +81,18 @@ classdef ADAU1452
         
         % 192kHzConfig
         % Temporary cop out register dump :p
-        function [success] = setSPT192kConfig(obj)
+        function [success] = set192kSPTConfig(obj)
         end
 
 
     end % End Public Methods
 
     %% Private Methods
-    methods (Access = private) % make private later
-
-        
+    methods (Access = private)
+        function [serialPortConfig] = getSerialPortConfig(obj)
+            serialPortConfig = obj.getSerialPortConfig_registers();
+        end
+        [serialPortConfig] = getSerialPortConfig_registers(obj);
         [response] = readADAU1452Register_aardvark(obj, address_uint16, readLength);
         [success] = writeADAU1452Register_aardvark(obj, address_uint16, value_uint16, maxChunkSize, verifyWrites);
     end

@@ -14,7 +14,7 @@ classdef ADAU1452ConnectionObj < handle
             arguments
                 options.WalnutIdx (1,1) {mustBeNumeric} = 1;
             end
-            if ~isMATLABReleaseOlderThan("R2023b")
+            if (~isMATLABReleaseOlderThan("R2023b") && license('test', 'instr_control_toolbox'))
                 try                   
                     list = aardvarklist;
                     controller = aardvark(list.SerialNumber(1)); clear list;
