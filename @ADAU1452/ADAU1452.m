@@ -26,7 +26,6 @@ classdef ADAU1452
             obj.HWOBJ = ADAU1452ConnectionObj('WalnutIdx',options.WalnutIdx);
             obj.ConnectionStatus = 'Connected';
             obj.Connected = obj.HWOBJ.IsConnected;
-            obj.readRegister(0xF204)
             obj.SerialPortConfig = obj.getSerialPortConfig();
         end
 
@@ -45,10 +44,9 @@ classdef ADAU1452
                obj 
                register_uint16 (1,:) {mustBeA(register_uint16,'uint16')}
                value_uint16 (1,:) {mustBeA(value_uint16,'uint16')}
-               options.maxChunkSize (1,1) = -1;
                options.verifyWrites (1,1) = false;
            end
-           success = obj.writeADAU1452Register_aardvark(register_uint16,value_uint16,'maxChunkSize', options.maxChunkSize,'verifyWrites',options.verifyWrites);
+           success = obj.writeADAU1452Register_aardvark(register_uint16, value_uint16, options.verifyWrites);
         end
 
         %% Data Routing Methods
@@ -94,6 +92,6 @@ classdef ADAU1452
         end
         [serialPortConfig] = getSerialPortConfig_registers(obj);
         [response] = readADAU1452Register_aardvark(obj, address_uint16, readLength);
-        [success] = writeADAU1452Register_aardvark(obj, address_uint16, value_uint16, maxChunkSize, verifyWrites);
+        [success] = writeADAU1452Register_aardvark(obj, address_uint16, value_uint16, verifyWrites);
     end
 end
