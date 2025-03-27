@@ -20,7 +20,6 @@ function [serialPortConfig] = getSerialPortConfig_registers(obj)
         reg_data{i} = local_decodeCTRLReg(ctrl0_value, ctrl1_value);
     end
     
-    a=1;
     %Concatenate structs
     serialPortConfig.SDATA_IN0 = reg_data{1};
     serialPortConfig.SDATA_IN1 = reg_data{2};

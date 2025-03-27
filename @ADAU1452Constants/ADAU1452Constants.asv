@@ -71,69 +71,48 @@ classdef ADAU1452Constants < handle
             %% Serial Port (SPT) Lookup Tables
             % frameClockSource - LRCLK pin selection
             sptFrameClockSourceBinary = [0b000, 0b001, 0b010, 0b011, 0b100]';
-            sptFrameClockSourceBinary_str = arrayfun(@num2str, sptFrameClockSourceBinary, 'UniformOutput', false);
             sptFrameClockSource = {'Slave from CLK domain 0', 'Slave from CLK domain 1', 'Slave from CLK domain 2', 'Slave from CLK domain 3', 'LRCLK is master'}';    
-            obj.SPTFrameClockSourceTable = table(sptFrameClockSourceBinary, sptFrameClockSourceBinary_str, sptFrameClockSource, 'VariableNames', ["Binary", "BinaryStr", "Value"], 'RowNames', sptFrameClockSource);
-            
-            % bitClockSource - BCLK pin selection
+            obj.SPTFrameClockSourceTable = table(sptFrameClockSourceBinary, sptFrameClockSource, 'VariableNames', ["Binary", '"Value"], 'RowNames', sptFrameClockSource);
+            % bitClockSource -  BCLK pin selection
             sptBitClockSourceBinary = [0b000, 0b001, 0b010, 0b011, 0b100]';
-            sptBitClockSourceBinary_str = arrayfun(@num2str, sptBitClockSourceBinary, 'UniformOutput', false);
-            sptBitClockSource = {'Slave from CLK domain 0', 'Slave from CLK domain 1', 'Slave from CLK domain 2', 'Slave from CLK domain 3', 'BCLK is master'}';
-            obj.SPTBitClockSourceTable = table(sptBitClockSourceBinary, sptBitClockSourceBinary_str, sptBitClockSource, 'VariableNames', ["Binary", "BinaryStr", "Value"], 'RowNames', sptBitClockSource);
-            
+            sptBitClockSource = {'Slave from CLK domain 0', 'Slave from CLK domain 1', 'Slave from CLK domain 2', 'Slave from CLK domain 3', 'BCLK is master'}';    
+            obj.SPTBitClockSourceTable = table(sptBitClockSourceBinary, sptBitClockSource, 'VariableNames', ["Binary", "Value"], 'RowNames', sptBitClockSource);
             % frameClockMode - LRCLK waveform type
             sptFrameClockModeBinary = [0b0, 0b1]';
-            sptFrameClockModeBinary_str = arrayfun(@num2str, sptFrameClockModeBinary, 'UniformOutput', false);
             sptFrameClockMode = {'50/50 duty cycle clock', 'Pulse'}';
-            obj.SPTFrameClockModeTable = table(sptFrameClockModeBinary, sptFrameClockModeBinary_str, sptFrameClockMode, 'VariableNames', ["Binary", "BinaryStr", "Value"], 'RowNames', sptFrameClockMode);
-            
+            obj.SPTFrameClockModeTable = table(sptFrameClockModeBinary, sptFrameClockMode, 'VariableNames', ["Binary", "Value"], 'RowNames', sptFrameClockMode);
             % frameClockPolarity - LRCLK polarity
             sptFrameClockPolarityBinary = [0b0, 0b1]';
-            sptFrameClockPolarityBinary_str = arrayfun(@num2str, sptFrameClockPolarityBinary, 'UniformOutput', false);
             sptFrameClockPolarity = {'Negative', 'Positive'}';
-            obj.SPTFrameClockPolarityTable = table(sptFrameClockPolarityBinary, sptFrameClockPolarityBinary_str, sptFrameClockPolarity, 'VariableNames', ["Binary", "BinaryStr", "Value"], 'RowNames', sptFrameClockPolarity);
-            
+            obj.SPTFrameClockPolarityTable = table(sptFrameClockPolarityBinary, sptFrameClockPolarity, 'VariableNames', ["Binary", "Value"], 'RowNames', sptFrameClockPolarity);
             % bitClockPolarity - BCLK polarity
             sptBitClockPolarityBinary = [0b0, 0b1]';
-            sptBitClockPolarityBinary_str = arrayfun(@num2str, sptBitClockPolarityBinary, 'UniformOutput', false);
             sptBitClockPolarity = {'Negative', 'Positive'}';
-            obj.SPTBitClockPolarityTable = table(sptBitClockPolarityBinary, sptBitClockPolarityBinary_str, sptBitClockPolarity, 'VariableNames', ["Binary", "BinaryStr", "Value"], 'RowNames', sptBitClockPolarity);
-            
+            obj.SPTBitClockPolarityTable = table(sptBitClockPolarityBinary, sptBitClockPolarity, 'VariableNames', ["Binary", "Value"], 'RowNames', sptBitClockPolarity);
             % wordLength - Audio data-word length
             sptWordLengthBinary = [0b00, 0b01, 0b10, 0b11]';
-            sptWordLengthBinary_str = arrayfun(@num2str, sptWordLengthBinary, 'UniformOutput', false);
             sptWordLength = {'24 bits', '16 bits', '32 bits', 'Flexible TDM mode'}';
-            obj.SPTWordLengthTable = table(sptWordLengthBinary, sptWordLengthBinary_str, sptWordLength, 'VariableNames', ["Binary", "BinaryStr", "Value"], 'RowNames', sptWordLength);
-            
+            obj.SPTWordLengthTable = table(sptWordLengthBinary, sptWordLength, 'VariableNames', ["Binary", "Value"], 'RowNames', sptWordLength);
             % dataFormat - MSB position
             sptDataFormatBinary = [0b00, 0b01, 0b10, 0b11]';
-            sptDataFormatBinary_str = arrayfun(@num2str, sptDataFormatBinary, 'UniformOutput', false);
             sptDataFormat = {'I2S - BCLK delay by 1', 'Left justified', 'Right justified 24-bit data (delay by 8)', 'Right justified 16-bit data (delay by 16)'}';
-            obj.SPTDataFormatTable = table(sptDataFormatBinary, sptDataFormatBinary_str, sptDataFormat, 'VariableNames', ["Binary", "BinaryStr", "Value"], 'RowNames', sptDataFormat);
-            
+            obj.SPTDataFormatTable = table(sptDataFormatBinary, sptDataFormat, 'VariableNames', ["Binary", "Value"], 'RowNames', sptDataFormat);
             % tdmMode - Channels per frame and BCLK cycles per channel
             sptTDMModeBinary = [0b000, 0b001, 0b010, 0b011, 0b100, 0b101]';
-            sptTDMModeBinary_str = arrayfun(@num2str, sptTDMModeBinary, 'UniformOutput', false);
             sptTDMMode = {'2 channels, 32 bit/channel', '4 channels, 32 bit/channel', '8 channels, 32 bit/channel', '16 channels, 32 bit/channel', '4 channels, 16 bit/channel', '2 channels, 16 bit/channel'}';
-            obj.SPTTDMModeTable = table(sptTDMModeBinary, sptTDMModeBinary_str, sptTDMMode, 'VariableNames', ["Binary", "BinaryStr", "Value"], 'RowNames', sptTDMMode);
-            
+            obj.SPTTDMModeTable = table(sptTDMModeBinary, sptTDMMode, 'VariableNames', ["Binary", "Value"], 'RowNames', sptTDMMode); 
             % tristateEnabled - Tristate unused output channels
             sptTristateEnabledBinary = [0b0, 0b1]';
-            sptTristateEnabledBinary_str = arrayfun(@num2str, sptTristateEnabledBinary, 'UniformOutput', false);
             sptTristateEnabled = {'Drive every output channel', 'Tristate unused output channels'}';
-            obj.SPTTristateEnabledTable = table(sptTristateEnabledBinary, sptTristateEnabledBinary_str, sptTristateEnabled, 'VariableNames', ["Binary", "BinaryStr", "Value"], 'RowNames', sptTristateEnabled);
-            
+            obj.SPTTristateEnabledTable = table(sptTristateEnabledBinary, sptTristateEnabled, 'VariableNames', ["Binary", "Value"], 'RowNames', sptTristateEnabled);
             % clockGenerator - Selects the clock generator to use for this spt
             sptClockGeneratorBinary = [0b00, 0b01, 0b10]';
-            sptClockGeneratorBinary_str = arrayfun(@num2str, sptClockGeneratorBinary, 'UniformOutput', false);
             sptClockGenerator = {'Clock generator 1', 'Clock generator 2', 'Clock generator 3 (high precision)'}';
-            obj.SPTClockGeneratorTable = table(sptClockGeneratorBinary, sptClockGeneratorBinary_str, sptClockGenerator, 'VariableNames', ["Binary", "BinaryStr", "Value"], 'RowNames', sptClockGenerator);
-            
+            obj.SPTClockGeneratorTable = table(sptClockGeneratorBinary, sptClockGenerator, 'VariableNames', ["Binary", "Value"], 'RowNames', sptClockGenerator);
             % sampleRate - Sample Rate
             sptSampleRateBinary = [0b000, 0b001, 0b010, 0b011, 0b100]';
-            sptSampleRateBinary_str = arrayfun(@num2str, sptSampleRateBinary, 'UniformOutput', false);
             sptSampleRate = {'Fs/4', 'Fs/2', 'Fs', '2*Fs', '4*Fs'}';
-            obj.SPTSampleRateTable = table(sptSampleRateBinary, sptSampleRateBinary_str, sptSampleRate, 'VariableNames', ["Binary", "BinaryStr", "Value"], 'RowNames', sptSampleRate);
+            obj.SPTSampleRateTable = table(sptSampleRateBinary, sptSampleRate, 'VariableNames', ["Binary", "Value"], 'RowNames', sptSampleRate);
         end
     end
 end
